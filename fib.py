@@ -10,7 +10,7 @@ def fib(n):
 def Main():
 	parser = argparse.ArgumentParser()
 # use mutually exclusive groups (either/or) to make options
-	group = parser.add_mutually_exclusive_grup()
+	group = parser.add_mutually_exclusive_group()
 	group.add_argument("-v", "--verbose", help="Gives a detailed answer", action="store_true")
 	group.add_argument("-q", "--quiet", help="Gives just the answer", action="store_true")
 	parser.add_argument("num", help=" The number of fironacci iterations you wish to calculate", type=int)
@@ -34,6 +34,5 @@ def Main():
 		f.close()
 
 # this runs the parser
-	if __name__ == '__main__':
-		Main()
-
+if __name__ == '__main__':
+	Main()
