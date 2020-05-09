@@ -36,17 +36,20 @@ group = parser.add_mutually_exclusive_group()
 
 # Set up email
 # set up sending email and password normally I would store in the file this way I don't have to give my own
+# removed action='store_true' from -send
 group.add_argument("-s","--saveemail", help="Use this option to write to set your e-mail")
 group.add_argument("-del","--deleteemail",  help="Use this option to delete your email")
 group.add_argument("-w","--whatemail",  action='store_true', help="Use this option to display what email you have saved")
 group.add_argument("--emailme", action='store_true', help="send test email")
-group.add_argument("-send","--setsendingemail",  action='store_true', help="Use this to set the email you send from. Set up to be sent from gmail")
-group.add_argument("-epass", "--setsendemailpass",  action='store_true', help="Use this to set your sending email password")
+group.add_argument("-send","--setsendingemail",  help="Use this to set the email you send from. Set up to be sent from gmail")
+group.add_argument("-epass","--setsendemailpass", help="Use this to set your sending email password")
 
 group.add_argument("-set", "--setprice",  help="Use this to set the price threshold you want to be notified with")
 group.add_argument("-p", "--price", action='store_true', help="Use this to tell you what your current price threshold is")
 
-args = parser.parse_args()
+args, unknown = parser.parse_known_args()
+
+#args = parser.parse_args()
 # store email in plain text (yes I know this is bad)
 if args.saveemail:
     f = open("saveemail.txt", "w")
@@ -121,9 +124,9 @@ if args.emailme:
     li = [email_me] 
   
     for dest in li: 
-        s = smtplib.SMTP('https://www.guerrillamail.com/inbox', 587) 
+        s = smtplib.SMTP('smtp.gmail.com', 587) 
         s.starttls() 
-        s.login(sendmail, "python") 
+        s.login(sendmail, emailpass) 
         message = "Is this thing on??"
         s.sendmail(sendmail, dest, message) 
         s.quit() 
@@ -152,11 +155,9 @@ if amazonprice <= myprice:
     for dest in li: 
         s = smtplib.SMTP('smtp.gmail.com', 587) 
         s.starttls() 
-        s.login("python@sharklasers.com", "python") 
+        s.login(sendmail, emailpass) 
         message = "price alert"
-        s.sendmail("python@sharklasers.com", dest, message) 
+        s.sendmail(sendmail, dest, message) 
         s.quit()
         print("price alert email sent")
-
-
 
